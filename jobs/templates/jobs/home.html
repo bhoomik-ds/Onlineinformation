@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'jobs/css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4 px-4">
+  <div class="d-flex main-content" style="gap:2rem;">
+    <div style="flex:2.2; min-width:400px;">
+      <div class="sidebar-card" style="border:2px solid #003366;">
+        <h5 style="background:#003366; color:#fff; border-radius:10px; padding:0.5rem 1rem; margin-bottom:1rem;">
+          <i class="fa fa-briefcase me-2 text-warning"></i>Latest Jobs
+        </h5>
+
+        <section class="cards-grid" aria-label="Latest jobs">
+          {% for job in jobs %}
+            <article class="card">
+              <div class="card-thumb">
+                {% if job.image %}
+                  <img src="{{ job.image.url }}" alt="{{ job.title }}">
+                {% else %}
+                  <img src="{% static 'images/default-job.jpg' %}" alt="default">
+                {% endif %}
+              </div>
+
+              <div class="card-body">
+                <h3 class="card-title">&gt;&gt; {{ job.title }}</h3>
+                <p class="card-meta">{{ job.short_description|truncatechars:140 }}</p>
+
+                {% if job.external_link %}
+                  <a href="{{ job.external_link }}" class="btn-external" target="_blank" rel="noopener">Open Link</a>
+                {% endif %}
+              </div>
+            </article>
+          {% empty %}
+            <p class="muted">No items available.</p>
+          {% endfor %}
+        </section>
+
+      </div>
+
+      <div class="sidebar-card" style="border:2px solid #ffcc00; margin-top:1rem;">
+        <h5 style="background:#003366; color:#fff; border-radius:10px; padding:0.5rem 1rem; margin-bottom:1rem;">
+          <i class="fa fa-bell me-2 text-warning"></i>Notification
+        </h5>
+        <ul style="list-style:none; padding-left:0;">
+          {% for notification in notifications %}
+            <li style="margin-bottom:0.7rem;">
+              <div style="color:#004d99; display:block; padding:0.4rem 0.7rem; border-radius:6px; border:2px solid #000;">
+                <span style="color:#ffcc00;font-weight:bold;">&gt;&gt;</span> {{ notification.title }}<br>
+                <span style="font-size:0.95rem; color:#222;">{{ notification.content }}</span>
+              </div>
+            </li>
+          {% empty %}
+            <li class="text-muted">No notifications available.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

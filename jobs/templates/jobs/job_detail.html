@@ -1,0 +1,819 @@
+{% extends 'jobs/base.html' %}
+{% load static %}
+
+{% block title %}{{ job.title }} - Job Details{% endblock %}
+
+{% block extra_head %}
+    <style>
+    /* Page Header */
+    .page-header {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4a90e2 100%);
+        padding: 80px 0 60px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .page-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="100" fill="url(%23a)"/><circle cx="800" cy="300" r="150" fill="url(%23a)"/><circle cx="400" cy="700" r="120" fill="url(%23a)"/></svg>');
+        opacity: 0.3;
+    }
+    
+    .page-header-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: white;
+    }
+    
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(45deg, #fff, #87ceeb, #b0e0e6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: fadeInUp 1s ease-out;
+    }
+    
+    .page-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        animation: fadeInUp 1s ease-out 0.2s both;
+    }
+    
+    /* Job Detail Container */
+    .job-detail-container {
+        max-width: 75%;
+        margin: -40px auto 0;
+        position: relative;
+        z-index: 3;
+    }
+    
+    .job-detail-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    /* Job Header */
+    .job-header {
+        background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+        padding: 2rem;
+        border-bottom: 1px solid rgba(30, 60, 114, 0.1);
+    }
+    
+    .job-header-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 2rem;
+    }
+    
+    .job-icon-large {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #87ceeb, #b0e0e6);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 10px 30px rgba(135, 206, 235, 0.3);
+    }
+    
+    .job-icon-large i {
+        font-size: 2rem;
+        color: #1e3c72;
+    }
+    
+    .job-title-section h1 {
+        color: #1e3c72;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+    }
+    
+    .job-company {
+        color: #666;
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+    
+    .job-location {
+        color: #888;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    /* Job Meta */
+    .job-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        padding: 2rem;
+    }
+    
+    .meta-card {
+        background: linear-gradient(135deg, #f8f9ff 0%, #f0f8ff 100%);
+        border-radius: 15px;
+        padding: 1.5rem;
+        border: 1px solid rgba(30, 60, 114, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .meta-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(30, 60, 114, 0.15);
+    }
+    
+    .meta-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #87ceeb, #b0e0e6);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    
+    .meta-icon i {
+        font-size: 1.2rem;
+        color: #1e3c72;
+    }
+    
+    .meta-label {
+        color: #666;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .meta-value {
+        color: #1e3c72;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+    
+    /* Job Description */
+    .job-description-section {
+        padding: 2rem;
+    }
+    
+    .section-title {
+        color: #1e3c72;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .section-title::before {
+        content: '';
+        width: 4px;
+        height: 30px;
+        background: linear-gradient(180deg, #1e3c72, #2a5298);
+        border-radius: 2px;
+    }
+    
+    .job-description {
+        color: #555;
+        line-height: 1.8;
+        font-size: 1rem;
+    }
+    
+    /* Top Image Styling */
+    .job-image-top {
+        text-align: center;
+        padding: 0;
+        margin-bottom: 2rem;
+    }
+    
+    .job-main-image {
+        width: 100%;
+        max-width: 1200px;
+        height: auto;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Job Title Header */
+    .job-title-header {
+        text-align: center;
+        padding: 1rem 2rem;
+        border-bottom: 2px solid rgba(30, 60, 114, 0.1);
+        margin-bottom: 2rem;
+    }
+    
+    .job-title-header h1 {
+        color: #1e3c72;
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+    }
+    
+    /* Job Info Section */
+    .job-info-section {
+        padding: 0 2rem 2rem;
+    }
+    
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .info-row:last-child {
+        border-bottom: none;
+    }
+    
+    .info-label {
+        font-weight: 700;
+        color: #1e3c72;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex: 0 0 auto;
+    }
+    
+    .info-value {
+        color: #333;
+        font-size: 1rem;
+        font-weight: 500;
+        text-align: right;
+        flex: 1;
+        margin-left: 1rem;
+    }
+    
+    /* Description Section */
+    .description-section {
+        padding: 1rem 2rem 2rem;
+        border-top: 2px solid rgba(30, 60, 114, 0.1);
+    }
+    
+    .description-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 1rem 0;
+    }
+    
+    .desc-label {
+        font-weight: 700;
+        color: #1e3c72;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        flex: 0 0 auto;
+        min-width: 120px;
+    }
+    
+    .desc-value {
+        color: #333;
+        font-size: 1rem;
+        line-height: 1.6;
+        flex: 1;
+        margin-left: 1rem;
+        text-align: justify;
+    }
+    
+    /* Question-Answer Style Sections */
+    .qa-section {
+        padding: 1.5rem 2rem;
+        border-top: 2px solid rgba(30, 60, 114, 0.1);
+        background: rgba(240, 248, 255, 0.5);
+    }
+    
+    .qa-question {
+        font-weight: 700;
+        color: #1e3c72;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #87ceeb;
+    }
+    
+    .qa-answer {
+        color: #333;
+        font-size: 1rem;
+        line-height: 1.7;
+        text-align: justify;
+        padding-left: 1rem;
+    }
+    
+    /* Exam Pattern Table Styling */
+    .exam-pattern-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .exam-pattern-content table th,
+    .exam-pattern-content table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid rgba(30, 60, 114, 0.1);
+    }
+    
+    .exam-pattern-content table th {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.9rem;
+    }
+    
+    .exam-pattern-content table td {
+        background: rgba(240, 248, 255, 0.3);
+        color: #333;
+        font-size: 0.95rem;
+    }
+    
+    .exam-pattern-content table tr:nth-child(even) td {
+        background: rgba(135, 206, 235, 0.1);
+    }
+    
+    .exam-pattern-content table tr:hover td {
+        background: rgba(135, 206, 235, 0.2);
+        transition: background 0.3s ease;
+    }
+    
+    .exam-pattern-content table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    /* Dual Info Section (Age Limit & Application Fee) */
+    .dual-info-section {
+        display: flex;
+        justify-content: space-between;
+        padding: 1.5rem 2rem;
+        border-top: 2px solid rgba(30, 60, 114, 0.1);
+        gap: 2rem;
+    }
+    
+    .dual-info-item {
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background: rgba(135, 206, 235, 0.1);
+        border-radius: 10px;
+        border-left: 4px solid #87ceeb;
+    }
+    
+    /* Action Buttons */
+    .job-actions {
+        background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+        padding: 2rem;
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .btn-apply {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.1rem;
+    }
+    
+    .btn-apply:hover {
+        background: linear-gradient(135deg, #2a5298, #4a90e2);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(30, 60, 114, 0.3);
+    }
+    
+    .btn-save {
+        background: transparent;
+        color: #87ceeb;
+        border: 2px solid #87ceeb;
+        padding: 1rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.1rem;
+    }
+    
+    .btn-save:hover {
+        background: #87ceeb;
+        color: white;
+        transform: translateY(-3px);
+    }
+    
+    .btn-share {
+        background: transparent;
+        color: #1e3c72;
+        border: 2px solid #1e3c72;
+        padding: 1rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.1rem;
+    }
+    
+    .btn-share:hover {
+        background: #1e3c72;
+        color: white;
+        transform: translateY(-3px);
+    }
+    
+    /* Back Button */
+    .back-button {
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 0.8rem 1.5rem;
+        border-radius: 25px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+    }
+    
+    .back-button:hover {
+        background: rgba(255, 255, 255, 0.3);
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .fade-in-up {
+        animation: fadeInUp 0.8s ease-out;
+    }
+    
+    /* Links Grid */
+    .links-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .link-button {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 1rem 1.5rem;
+        border-radius: 15px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: 2px solid;
+    }
+    
+    .apply-link {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border-color: #28a745;
+    }
+    
+    .apply-link:hover {
+        background: linear-gradient(135deg, #20c997, #17a2b8);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+    }
+    
+    .notification-link {
+        background: linear-gradient(135deg, #dc3545, #e74c3c);
+        color: white;
+        border-color: #dc3545;
+    }
+    
+    .notification-link:hover {
+        background: linear-gradient(135deg, #e74c3c, #f39c12);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(220, 53, 69, 0.3);
+    }
+    
+    .whatsapp-link {
+        background: linear-gradient(135deg, #25d366, #128c7e);
+        color: white;
+        border-color: #25d366;
+    }
+    
+    .whatsapp-link:hover {
+        background: linear-gradient(135deg, #128c7e, #075e54);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+    }
+    
+    .telegram-link {
+        background: linear-gradient(135deg, #0088cc, #0088cc);
+        color: white;
+        border-color: #0088cc;
+    }
+    
+    .telegram-link:hover {
+        background: linear-gradient(135deg, #006699, #004d73);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 136, 204, 0.3);
+    }
+    
+    .youtube-link {
+        background: linear-gradient(135deg, #ff0000, #cc0000);
+        color: white;
+        border-color: #ff0000;
+    }
+    
+    .youtube-link:hover {
+        background: linear-gradient(135deg, #cc0000, #990000);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .job-detail-container { max-width: 95%; }
+        .page-title { font-size: 1.8rem; }
+        .job-title-header h1 { font-size: 1.5rem; }
+        .info-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        .info-value {
+            text-align: left;
+            margin-left: 0;
+        }
+        .description-row {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .desc-value {
+            margin-left: 0;
+        }
+        .dual-info-section {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .dual-info-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        .back-button { position: static; margin-bottom: 1rem; }
+        .links-grid { grid-template-columns: 1fr; }
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+        <div class="container">
+        <div class="page-header-content">
+            <a href="{% url 'job_list' %}" class="back-button">
+                <i class="fa fa-arrow-left"></i>
+                Back to Jobs
+            </a>
+            <h1 class="page-title">{{ job.title }}</h1>
+            <p class="page-subtitle">Job Details & Application Information</p>
+        </div>
+    </div>
+</section>
+
+<!-- Job Detail Container -->
+<div class="job-detail-container">
+    <div class="job-detail-card fade-in-up">
+        
+        <!-- Job Title First -->
+        <div class="job-title-header">
+            <h1>{{ job.title }}</h1>
+        </div>
+        
+        <!-- Job Image After Title -->
+        {% if job.image %}
+        <div class="job-image-top">
+            <img src="{{ job.image.url }}" alt="{{ job.title }}" class="job-main-image">
+        </div>
+        {% endif %}
+        
+        <!-- Organization Information -->
+        <div class="job-info-section">
+            {% if job.organization_name %}
+            <div class="info-row">
+                <span class="info-label">ORGANIZATION:</span>
+                <span class="info-value">{{ job.organization_name }}</span>
+            </div>
+            {% endif %}
+            
+            {% if job.post_name %}
+            <div class="info-row">
+                <span class="info-label">POST NAME:</span>
+                <span class="info-value">{{ job.post_name }}</span>
+            </div>
+            {% endif %}
+            
+            {% if job.salary %}
+            <div class="info-row">
+                <span class="info-label">SALARY:</span>
+                <span class="info-value">{{ job.salary }}</span>
+            </div>
+            {% endif %}
+            
+            {% if job.total_vacancies %}
+            <div class="info-row">
+                <span class="info-label">TOTAL VACANCIES:</span>
+                <span class="info-value">{{ job.total_vacancies }}</span>
+            </div>
+            {% endif %}
+            
+            {% if job.start_date %}
+            <div class="info-row">
+                <span class="info-label">START DATE:</span>
+                <span class="info-value">{{ job.start_date }}</span>
+            </div>
+            {% endif %}
+            
+            {% if job.end_date %}
+            <div class="info-row">
+                <span class="info-label">END DATE:</span>
+                <span class="info-value">{{ job.end_date }}</span>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Title and Description -->
+        {% if job.short_description %}
+        <div class="description-section">
+            <div class="description-row">
+                <span class="desc-label">DESCRIPTION:</span>
+                <span class="desc-value">{{ job.short_description }}</span>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Education Qualification (Question-Answer Style) -->
+        {% if job.education_qualification %}
+        <div class="qa-section">
+            <div class="qa-question">EDUCATION QUALIFICATION</div>
+            <div class="qa-answer">{{ job.education_qualification }}</div>
+        </div>
+        {% endif %}
+        
+        <!-- Age Limit and Application Fee (Same Row) -->
+        <div class="dual-info-section">
+            {% if job.age_limit %}
+            <div class="dual-info-item">
+                <span class="info-label">AGE LIMIT:</span>
+                <span class="info-value">{{ job.age_limit }}</span>
+            </div>
+            {% endif %}
+            
+            {% if job.application_fee %}
+            <div class="dual-info-item">
+                <span class="info-label">APPLICATION FEE:</span>
+                <span class="info-value">{{ job.application_fee }}</span>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Exam Pattern (Question-Answer Style) -->
+        {% if job.exam_pattern %}
+        <div class="qa-section">
+            <div class="qa-question">EXAM PATTERN</div>
+            <div class="qa-answer exam-pattern-content">
+                {{ job.exam_pattern|safe|linebreaks }}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Job Description -->
+        {% if job.short_description %}
+        <div class="job-description-section">
+            <h2 class="section-title">
+                <i class="fa fa-file-text"></i>
+                Job Description
+            </h2>
+            <div class="job-description">
+                {{ job.short_description|linebreaks }}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Links Section -->
+        {% if job.apply_online_link or job.official_notification_link or job.whatsapp_link or job.telegram_link or job.youtube_link %}
+        <div class="job-description-section">
+            <h2 class="section-title">
+                <i class="fa fa-link"></i>
+                Important Links
+            </h2>
+            <div class="links-grid">
+                {% if job.apply_online_link %}
+                <a href="{{ job.apply_online_link }}" target="_blank" class="link-button apply-link">
+                    <i class="fa fa-external-link-alt"></i>
+                    Apply Online
+                </a>
+                {% endif %}
+                
+                {% if job.official_notification_link %}
+                <a href="{{ job.official_notification_link }}" target="_blank" class="link-button notification-link">
+                    <i class="fa fa-file-pdf"></i>
+                    Official Notification
+                </a>
+                {% endif %}
+                
+                {% if job.whatsapp_link %}
+                <a href="{{ job.whatsapp_link }}" target="_blank" class="link-button whatsapp-link">
+                    <i class="fab fa-whatsapp"></i>
+                    WhatsApp Channel
+                </a>
+                {% endif %}
+                
+                {% if job.telegram_link %}
+                <a href="{{ job.telegram_link }}" target="_blank" class="link-button telegram-link">
+                    <i class="fab fa-telegram"></i>
+                    Telegram Channel
+                </a>
+                {% endif %}
+                
+                {% if job.youtube_link %}
+                <a href="{{ job.youtube_link }}" target="_blank" class="link-button youtube-link">
+                    <i class="fab fa-youtube"></i>
+                    YouTube Channel
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Action Buttons -->
+        <div class="job-actions">
+            <a href="#" class="btn-apply">
+                <i class="fa fa-paper-plane"></i>
+                Apply Now
+            </a>
+            <a href="#" class="btn-save">
+                <i class="fa fa-bookmark"></i>
+                Save Job
+            </a>
+            <a href="#" class="btn-share">
+                <i class="fa fa-share-alt"></i>
+                Share Job
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

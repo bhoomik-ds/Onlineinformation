@@ -1,0 +1,75 @@
+<nav class="navbar navbar-expand-lg sticky-top modern-navbar">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand d-flex align-items-center gap-3" href="{% url 'home' %}">
+            <div class="brand-icon">
+                <i class="fa fa-globe"></i>
+            </div>
+            <div class="brand-text">
+                <span class="brand-main">Online Information</span>
+                <span class="brand-sub">Your Gateway to Opportunities</span>
+            </div>
+        </a>
+        {% comment %}
+        <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="toggler-line"></span>
+            <span class="toggler-line"></span>
+            <span class="toggler-line"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav gap-2 align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link modern-nav-link" href="{% url 'home' %}">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link modern-nav-link" href="{% url 'job_list' %}">
+                        <i class="fa fa-briefcase"></i>
+                        <span>Jobs</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link modern-nav-link" href="{% url 'result_list' %}">
+                        <i class="fa fa-trophy"></i>
+                        <span>Results</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link modern-nav-link" href="{% url 'notification_list' %}">
+                        <i class="fa fa-bell"></i>
+                        <span>Notifications</span>
+                        <span class="notification-badge">3</span>
+                    </a>
+                </li>
+                {% endcomment %}
+                {% comment %}
+                <li class="nav-item">
+                    <a class="nav-link modern-nav-link" href="{% url 'contact' %}">
+                        <i class="fa fa-envelope"></i>
+                        <span>Contact</span>
+                    </a>
+                </li>
+                
+            </ul>
+            
+            <div class="navbar-actions d-flex align-items-center gap-3 ms-4">
+                <div class="search-container">
+                    <form class="modern-search-form">
+                        <div class="search-input-group">
+                            <input type="text" class="search-input" placeholder="Search jobs, results...">
+                            <button type="submit" class="search-btn">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                        {% endcomment %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,43 @@
+/* Base Template Styles for Jobs App */
+.job-card { 
+    background: #fff; 
+    border-radius: 16px; 
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08); 
+    margin-bottom: 1.5rem; 
+    padding: 1.2rem; 
+    transition: box-shadow 0.2s; 
+}
+.job-card:hover { 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12); 
+}
+.job-card.important { 
+    background: #fffbe6; 
+    border: 2px solid #ffcc00; 
+}
+.contact-card { 
+    background: #fff; 
+    border-radius: 16px; 
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08); 
+    margin: 40px auto; 
+    padding: 2rem; 
+    max-width: 500px; 
+}
+.contact-card h2 { 
+    color: #004d99; 
+    font-weight: 600; 
+    margin-bottom: 1.5rem; 
+}
+.form-control, .form-label { 
+    font-size: 1rem; 
+}
+.btn-contact { 
+    background: #004d99; 
+    color: #fff; 
+    border-radius: 8px; 
+    padding: 0.6rem 2rem; 
+    font-weight: 600; 
+    transition: background 0.2s; 
+}
+.btn-contact:hover { 
+    background: #0074d9; 
+}

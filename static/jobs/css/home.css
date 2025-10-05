@@ -1,0 +1,251 @@
+/* ---------- Grid layout ---------- */
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;   /* default: single column for mobile */
+  gap: 14px;
+  margin-top: 18px;
+  box-sizing: border-box;
+}
+
+/* Tablet view */
+@media (min-width: 720px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop view */
+@media (min-width: 1100px) {
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---------- Card container ---------- */
+.card {
+  background: #fff;
+  border: 2px solid #003366;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform .12s, box-shadow .12s;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.10);
+}
+
+/* ---------- Image container ---------- */
+.card-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;   /* widescreen look (desktop/tablet) */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fb;
+  border-bottom: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.card-thumb img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  background-color: #fff;
+}
+
+/* ---------- Card body ---------- */
+.card-body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Title */
+.card-title {
+  font-size: 1rem;
+  margin: 0 0 6px;
+  color: #003366;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Description */
+.card-meta {
+  font-size: 0.92rem;
+  color: #444;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  overflow-wrap: anywhere;
+}
+
+/* Open Link button */
+.card-body .btn-external {
+  display: inline-block;
+  margin: 0 auto;
+  background: #ffcc00;
+  color: #003366;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform .12s;
+  white-space: nowrap;
+}
+
+.card-body .btn-external:hover {
+  transform: translateY(-2px);
+  background: #ffe066;
+}
+
+/* Extra small screens */
+@media (max-width: 420px) {
+  .card-body {
+    padding: 10px;
+  }
+
+  .card-title {
+    font-size: 0.95rem;
+  }
+
+  .card-meta {
+    font-size: 0.88rem;
+  }
+
+  .card-body .btn-external {
+    font-size: 0.9rem;
+    padding: 7px 12px;
+  }
+}
+
+/* ---------- MOBILE ONLY: remove left gap, prevent right cut, center cards ---------- */
+@media (max-width: 720px) {
+  /* Global safety */
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    max-width: 100% !important;
+  }
+
+  /* Remove container paddings that cause left gap */
+  .container-fluid,
+  .main-content,
+  .sidebar-card {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Allow flex children to shrink so no overflow from min-width */
+  .main-content > div,
+  .d-flex > .main-content,
+  .d-flex > div {
+    min-width: 0 !important;
+  }
+
+  /* Grid: single column, full width inside viewport, small equal breathing */
+  .cards-grid {
+    grid-template-columns: 1fr !important;
+    justify-items: stretch !important;   /* stretch cards to full column width */
+    align-items: start !important;
+    gap: 12px !important;
+    margin: 0 !important;
+    padding: 0 8px !important;           /* small equal left/right padding */
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Card: full width of column without causing overflow */
+  .card {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    border-left-width: 2px !important;
+    border-right-width: 2px !important;
+    border-radius: 10px !important;
+  }
+
+  .card-thumb {
+  height: auto !important;
+  aspect-ratio: unset !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #fff !important;
+}
+
+.card-thumb img {
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: 100% !important;
+  object-fit: contain !important;   /* no crop, full image shown */
+  display: block !important;
+}
+
+
+  /* Image: mobile ratio, avoid cut 
+  .card-thumb {
+    width: 100% !important;
+    aspect-ratio: 3 / 2 !important;
+    max-height: 200px !important;
+    box-sizing: border-box !important;
+  }
+
+  .card-thumb img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    max-width: 100% !important;
+  }
+    */
+
+  /* Body: tighten padding but avoid side overflow */
+  .card-body {
+    padding: 10px 12px !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+  }
+
+  .card-title {
+    font-size: 0.95rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  .card-meta {
+    font-size: 0.86rem !important;
+    line-height: 1.35 !important;
+    margin-bottom: 6px !important;
+  }
+
+  .card-body .btn-external {
+    font-size: 0.9rem !important;
+    padding: 7px 12px !important;
+    margin-top: 6px !important;
+    white-space: nowrap !important;
+  }
+}

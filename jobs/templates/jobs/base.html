@@ -1,0 +1,35 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Online Information{% endblock %}</title>
+
+  <!-- Global styles -->
+  <link rel="stylesheet" href="{% static 'jobs/css/style.css' %}">
+
+  <!-- Page specific extra head -->
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <!-- Navigation / header -->
+  {% block header %}
+  <header>
+    <!-- put your header markup here -->
+  </header>
+  {% endblock %}
+
+  <!-- Main content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  {% block footer %}
+  <footer>
+    <!-- put your footer markup here -->
+  </footer>
+  {% endblock %}
+</body>
+</html>
