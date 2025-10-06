@@ -11,6 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files
 MEDIA_URL = '/media/'
@@ -22,9 +23,7 @@ CLOUDINARY_STORAGE = {
     'API_KEY': config('388648679118291'),
     'API_SECRET': config('R0LTBqlkligttnBVj5hB7UkoFOQ'),
 }
-
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 cloudinary.config(
     cloud_name=CLOUDINARY_STORAGE['dd4lbhc8g'],
@@ -34,9 +33,13 @@ cloudinary.config(
 )
 
 # Security
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config('r%+)pv+koavp4-62+%y%4m3yzr&fr+yg%farhra&e%xa373+ky')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*').split(',')
+
+# Vercel HTTPS support
+SECURE_SSL_REDIRECT = not DEBUG
+USE_X_FORWARDED_HOST = True
 
 # Installed apps
 INSTALLED_APPS = [
